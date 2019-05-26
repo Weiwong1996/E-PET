@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+	<!-- 自动扫描该包 -->
+	<context:component-scan base-package="dao"/>
+	<context:component-scan base-package="entity"/>
+	<context:component-scan base-package="mapper"/>
+	<context:component-scan base-package="service"/>
+	<!-- 加载 jdbc.properties 数据连接配置信息 -->
+	<context:property-placeholder location="classpath:mysql.properties" />
+	<!-- c3p0数据源配置 -->
+
+	<bean id="dataSource_hikari" class="com.zaxxer.hikari.HikariDataSource"
+        destroy-method="shutdown">
+        <!-- <property name="driverClass" value="com.mysql.jdbc.Driver" />-->
+        <property name="jdbcUrl" value="${jdbc.url}"></property>
+        <property name="username" value="${jdbc.username}"></property>
+        <property name="password" value="${jdbc.password}"></property>
+        <property name="readOnly" value="false"></property>
+        <property name="connectionTimeout" value="30000"></property>
+		<property name="idleTimeout" value="600000"></property>
+		<property name="maxLifetime" value="1800000"></property>
+		<property name="maximumPoolSize" value="20"></property>
+    </bean>
+
+	<!-- spring和MyBatis完美整合，不需要mybatis的配置映射文件 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource_hikari" />
+		<!-- 自动扫描mapper.xml文件 -->
+		<property name="mapperLocations" value="classpath:mapper/*.xml"></property>
+		<!-- 它一般对应我们的实体类所在的包，这个时候会自动取对应包中不包括包名的简单类名作为包括包名的别名。 -->
+		<!--多个package之间可以用逗号或者分号等来进行分隔。(value的值一定要是包的全名) -->
+		<property name="typeAliasesPackage" value="entity" />
+	</bean>
+	<!-- DAO接口所在包名，Spring会自动查找其下的类 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="dao" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+	</bean>
+	<!-- (事务管理) -->
+	<bean id="txManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource_hikari" />
+	</bean>
+	<tx:annotation-driven transaction-manager="txManager" />
+</beans>

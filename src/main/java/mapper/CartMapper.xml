@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dao.CartMapper" >
+  <resultMap id="BaseResultMap" type="entity.Cart" >
+    <id column="cartid" property="cartid" jdbcType="INTEGER" />
+    <result column="userid" property="userid" jdbcType="INTEGER" />
+    <result column="pname" property="pname" jdbcType="VARCHAR" />
+    <result column="csumprice" property="csumprice" jdbcType="DECIMAL" />
+    <result column="pimg" property="pimg" jdbcType="VARCHAR" />
+    <result column="pprice" property="pprice" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    cartid, userid, pname, csumprice, pimg, pprice
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from cart
+    where cartid = #{cartid,jdbcType=INTEGER}
+  </select>
+  <select id="selectByUserid" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from cart
+    where userid = #{userid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from cart
+    where cartid = #{cartid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPname" parameterType="String" >
+    delete from cart
+    where pname = #{pname,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="entity.Cart" >
+    insert into cart (cartid, userid, pname,
+      csumprice, pimg, pprice
+      )
+    values (#{cartid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{pname,jdbcType=VARCHAR},
+      #{csumprice,jdbcType=DECIMAL}, #{pimg,jdbcType=VARCHAR}, #{pprice,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="entity.Cart" >
+    insert into cart
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="cartid != null" >
+        cartid,
+      </if>
+      <if test="userid != null" >
+        userid,
+      </if>
+      <if test="pname != null" >
+        pname,
+      </if>
+      <if test="csumprice != null" >
+        csumprice,
+      </if>
+      <if test="pimg != null" >
+        pimg,
+      </if>
+      <if test="pprice != null" >
+        pprice,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="cartid != null" >
+        #{cartid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="pname != null" >
+        #{pname,jdbcType=VARCHAR},
+      </if>
+      <if test="csumprice != null" >
+        #{csumprice,jdbcType=DECIMAL},
+      </if>
+      <if test="pimg != null" >
+        #{pimg,jdbcType=VARCHAR},
+      </if>
+      <if test="pprice != null" >
+        #{pprice,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="entity.Cart" >
+    update cart
+    <set >
+      <if test="userid != null" >
+        userid = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="pname != null" >
+        pname = #{pname,jdbcType=VARCHAR},
+      </if>
+      <if test="csumprice != null" >
+        csumprice = #{csumprice,jdbcType=DECIMAL},
+      </if>
+      <if test="pimg != null" >
+        pimg = #{pimg,jdbcType=VARCHAR},
+      </if>
+      <if test="pprice != null" >
+        pprice = #{pprice,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where cartid = #{cartid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="entity.Cart" >
+    update cart
+    set userid = #{userid,jdbcType=INTEGER},
+      pname = #{pname,jdbcType=VARCHAR},
+      csumprice = #{csumprice,jdbcType=DECIMAL},
+      pimg = #{pimg,jdbcType=VARCHAR},
+      pprice = #{pprice,jdbcType=VARCHAR}
+    where cartid = #{cartid,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dao.ProductMapper" >
+  <resultMap id="BaseResultMap" type="entity.Product" >
+    <id column="pid" property="pid" jdbcType="INTEGER" />
+    <result column="pname" property="pname" jdbcType="VARCHAR" />
+    <result column="pimg" property="pimg" jdbcType="VARCHAR" />
+    <result column="pprice" property="pprice" jdbcType="VARCHAR" />
+    <result column="ptype" property="ptype" jdbcType="VARCHAR" />
+    <result column="pinfo" property="pinfo" jdbcType="VARCHAR" />
+    <result column="pstatu" property="pstatu" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    pid, pname, pimg, pprice, ptype, pinfo, pstatu
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from product
+    where pid = #{pid,jdbcType=INTEGER}
+  </select>
+  <select id="selectByPtype" resultMap="BaseResultMap" parameterType="String" >
+    select
+    <include refid="Base_Column_List" />
+    from product
+    where ptype = #{ptype,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByPname" resultMap="BaseResultMap" parameterType="String" >
+    select
+    <include refid="Base_Column_List" />
+    from product
+    where pname = #{pname,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from product
+    where pid = #{pid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="entity.Product" >
+    insert into product (pid, pname, pimg,
+      pprice, ptype, pinfo, pstatu
+      )
+    values (#{pid,jdbcType=INTEGER}, #{pname,jdbcType=VARCHAR}, #{pimg,jdbcType=VARCHAR},
+      #{pprice,jdbcType=VARCHAR}, #{ptype,jdbcType=VARCHAR}, #{pinfo,jdbcType=VARCHAR}, #{pstatu,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="entity.Product" >
+    insert into product
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="pid != null" >
+        pid,
+      </if>
+      <if test="pname != null" >
+        pname,
+      </if>
+      <if test="pimg != null" >
+        pimg,
+      </if>
+      <if test="pprice != null" >
+        pprice,
+      </if>
+      <if test="ptype != null" >
+        ptype,
+      </if>
+      <if test="pinfo != null" >
+        pinfo,
+      </if>
+      <if test="pstatu != null" >
+        pstatu,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="pid != null" >
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="pname != null" >
+        #{pname,jdbcType=VARCHAR},
+      </if>
+      <if test="pimg != null" >
+        #{pimg,jdbcType=VARCHAR},
+      </if>
+      <if test="pprice != null" >
+        #{pprice,jdbcType=VARCHAR},
+      </if>
+      <if test="ptype != null" >
+        #{ptype,jdbcType=VARCHAR},
+      </if>
+      <if test="pinfo != null" >
+        #{pinfo,jdbcType=VARCHAR},
+      </if>
+      <if test="pstatu != null" >
+        #{pstatu,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="entity.Product" >
+    update product
+    <set >
+      <if test="pname != null" >
+        pname = #{pname,jdbcType=VARCHAR},
+      </if>
+      <if test="pimg != null" >
+        pimg = #{pimg,jdbcType=VARCHAR},
+      </if>
+      <if test="pprice != null" >
+        pprice = #{pprice,jdbcType=VARCHAR},
+      </if>
+      <if test="ptype != null" >
+        ptype = #{ptype,jdbcType=VARCHAR},
+      </if>
+      <if test="pinfo != null" >
+        pinfo = #{pinfo,jdbcType=VARCHAR},
+      </if>
+      <if test="pstatu != null" >
+        pinfo = #{pstatu,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="entity.Product" >
+    update product
+    set pname = #{pname,jdbcType=VARCHAR},
+      pimg = #{pimg,jdbcType=VARCHAR},
+      pprice = #{pprice,jdbcType=VARCHAR},
+      ptype = #{ptype,jdbcType=VARCHAR},
+      pinfo = #{pinfo,jdbcType=VARCHAR},
+      pstatu = #{pstatu,jdbcType=VARCHAR}
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <select id="selectAllProduct" resultMap="BaseResultMap">
+		select * from product
+  </select>
+  <select id="proCount"  resultType="int">
+        select count(pid) from product
+  </select>
+  <select id="selectProList" resultType="entity.Product" parameterType="entity.Page">
+        select * from product limit #{startRow},#{pageSize}
+    </select>
+</mapper>
